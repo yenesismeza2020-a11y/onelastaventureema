@@ -4,13 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Last Archive</title>
-    <link rel="stylesheet" href="style.css?v=force_audio_fix">
+    <link rel="stylesheet" href="style.css?v=button_fix_v1">
+    <!-- Íconos para el botón de música -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Estilos para el botón flotante de música */
+        .music-control-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(161, 140, 209, 0.8);
+            border: 2px solid #6c5ce7;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .music-control-btn:hover {
+            transform: scale(1.1);
+            background: #6c5ce7;
+        }
+        .music-control-btn.playing i {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
 </head>
 <body>
+    <!-- Fondo de partículas por Canvas -->
     <canvas id="particleCanvas"></canvas>
 
-    <audio id="realMusic" loop src="music.mp3.mp3?v=force_audio_fix" preload="auto"></audio>
+    <!-- BOTÓN FLOTANTE DE MÚSICA -->
+    <button id="musicToggleBtn" class="music-control-btn" title="Reproducir/Pausar Música">
+        <i class="fas fa-music"></i>
+    </button>
 
+    <!-- AUDIO LOCAL (Asegúrate de que se llama music.mp3.mp3 o cámbialo a music.mp3 según tu archivo) -->
+    <audio id="realMusic" loop src="music.mp3.mp3?v=button_fix_v1" preload="auto"></audio>
+
+    <!-- Pantalla de Bienvenida (Intro) -->
     <div id="introScreen" class="overlay-screen active">
         <div class="intro-content">
             <h1 class="glitch-text">DREAM ARCHIVE</h1>
@@ -19,9 +63,11 @@
         </div>
     </div>
 
+    <!-- Contenedor Principal del Libro -->
     <div id="archiveContainer" class="hidden">
         <div class="book-wrapper">
             <div class="book-container" id="book">
+                <!-- Tapa Delantera -->
                 <div class="page cover front" id="coverFront">
                     <div class="cover-content">
                         <h2>The Last Archive</h2>
@@ -31,6 +77,7 @@
                     </div>
                 </div>
 
+                <!-- Páginas dinámicas -->
                 <div class="page dynamic-page turned" id="leftPage">
                     <div class="page-content left-content"></div>
                 </div>
@@ -41,6 +88,7 @@
                     </div>
                 </div>
 
+                <!-- Tapa Trasera -->
                 <div class="page cover back" id="coverBack">
                     <div class="cover-content">
                         <h3>Fin del Registro</h3>
@@ -49,6 +97,7 @@
             </div>
         </div>
 
+        <!-- Controles de navegación -->
         <div class="controls" id="controls">
             <button id="prevBtn" class="nav-btn" disabled>&#9664; Anterior</button>
             <span id="pageIndicator">330 / 365</span>
@@ -56,6 +105,7 @@
         </div>
     </div>
 
+    <!-- Pantalla Final Cinematográfica -->
     <div id="finalScreen" class="overlay-screen hidden">
         <div class="final-content">
             <h1 class="fade-in-target">Mission Complete</h1>
@@ -66,6 +116,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=force_audio_fix"></script>
+    <script src="script.js?v=button_fix_v1"></script>
 </body>
 </html>
