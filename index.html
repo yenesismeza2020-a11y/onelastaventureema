@@ -4,41 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Last Archive</title>
-    <link rel="stylesheet" href="style.css?v=button_fix_v1">
-    <!-- Íconos para el botón de música -->
+    <link rel="stylesheet" href="style.css?v=captcha_edition">
+    <!-- Íconos para los botones y el Captcha -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Estilos para el botón flotante de música */
-        .music-control-btn {
+        /* --- ESTILOS DEL CAPTCHA ROMÁNTICO --- */
+        .captcha-modal {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: rgba(161, 140, 209, 0.8);
-            border: 2px solid #6c5ce7;
-            border-radius: 50%;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: #ffffff;
+            color: #333333;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 10000;
+            width: 90%;
+            max-width: 350px;
+            font-family: 'Roboto', Arial, sans-serif;
+            opacity: 0;
+            pointer-events: none;
             transition: all 0.3s ease;
         }
-        .music-control-btn:hover {
-            transform: scale(1.1);
+        .captcha-modal.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .captcha-header {
             background: #6c5ce7;
+            color: white;
+            padding: 15px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
-        .music-control-btn.playing i {
-            animation: pulse 1.5s infinite;
+        .captcha-header h3 { margin: 0; font-size: 1rem; font-weight: bold; text-transform: uppercase; }
+        .captcha-header p { margin: 5px 0 0 0; font-size: 1.3rem; font-weight: 900; }
+        
+        .captcha-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            padding: 4px;
+            background: #f1f1f1;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .captcha-item {
+            aspect-ratio: 1;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #4a3b8c;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        .captcha-item span {
+            font-size: 0.65rem;
+            color: #777;
+            margin-top: 5px;
+            font-family: monospace;
+        }
+        .captcha-item.selected {
+            transform: scale(0.95);
+            border: 3px solid #6c5ce7;
+        }
+        .captcha-item.selected::after {
+            content: "\f058";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: #6c5ce7;
+            font-size: 1rem;
+            background: white;
+            border-radius: 50%;
+        }
+        .captcha-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-top: 1px solid #dfdfdf;
+            background: #fafafa;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .captcha-icons i { color: #777; margin-right: 12px; font-size: 1.1rem; }
+        .captcha-verify-btn {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-weight: bold;
+            border-radius: 3px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        .captcha-verify-btn:hover { background: #5643cc; }
+        .captcha-error {
+            color: #d63031;
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 5px;
+            display: none;
+            font-weight: bold;
+            background: #ffeaa7;
         }
     </style>
 </head>
@@ -46,13 +123,35 @@
     <!-- Fondo de partículas por Canvas -->
     <canvas id="particleCanvas"></canvas>
 
-    <!-- BOTÓN FLOTANTE DE MÚSICA -->
-    <button id="musicToggleBtn" class="music-control-btn" title="Reproducir/Pausar Música">
-        <i class="fas fa-music"></i>
-    </button>
-
-    <!-- AUDIO LOCAL (Asegúrate de que se llama music.mp3.mp3 o cámbialo a music.mp3 según tu archivo) -->
-    <audio id="realMusic" loop src="https://archive.org/download/fly-love-rio-soundtrack/Jamie%20Foxx%20-%20Fly%20Love%20%28Rio%20Soundtrack%29.mp3" preload="auto"></audio>
+    <!-- VENTANA DEL CAPTCHA ROMÁNTICO -->
+    <div id="captchaModal" class="captcha-modal">
+        <div class="captcha-header">
+            <h3>Verificación de Seguridad</h3>
+            <p>Selecciona el "Gatito Pixel" y los "Controles de Juego"</p>
+        </div>
+        <div id="captchaError" class="captcha-error">Acceso Denegado. Inténtalo de nuevo.</div>
+        <div class="captcha-grid">
+            <!-- 9 Casillas del Captcha (Mezcla de correctos e incorrectos) -->
+            <div class="captcha-item" data-correct="false">📁<span>archivo</span></div>
+            <div class="captcha-item" data-correct="true"><i class="fas fa-cat"></i><span>mishi</span></div>
+            <div class="captcha-item" data-correct="false"><i class="fas fa-car"></i><span>auto</span></div>
+            
+            <div class="captcha-item" data-correct="false"><i class="fas fa-coffee"></i><span>café</span></div>
+            <div class="captcha-item" data-correct="true"><i class="fas fa-gamepad"></i><span>player1</span></div>
+            <div class="captcha-item" data-correct="false"><i class="fas fa-tree"></i><span>árbol</span></div>
+            
+            <div class="captcha-item" data-correct="true"><i class="fas fa-gamepad"></i><span>player2</span></div>
+            <div class="captcha-item" data-correct="false"><i class="fas fa-book"></i><span>libro</span></div>
+            <div class="captcha-item" data-correct="false"><i class="fas fa-apple-alt"></i><span>manzana</span></div>
+        </div>
+        <div class="captcha-footer">
+            <div class="captcha-icons">
+                <i class="fas fa-redo" id="resetCaptcha" title="Reiniciar"></i>
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <button id="verifyBtn" class="captcha-verify-btn">Verificar</button>
+        </div>
+    </div>
 
     <!-- Pantalla de Bienvenida (Intro) -->
     <div id="introScreen" class="overlay-screen active">
@@ -116,6 +215,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=button_fix_v1"></script>
+    <script src="script.js?v=captcha_edition"></script>
 </body>
 </html>
