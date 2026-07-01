@@ -2,7 +2,7 @@ const reasons = {
     330: "Te amo porque, incluso cuando el mundo cambia constantemente, hay algo en mí que siempre encuentra el camino de regreso a ti.",
     331: "Te amo porque no quiero una historia perfecta contigo; quiero una historia real, donde ambos aprendamos, tropecemos y sigamos eligiéndonos.",
     332: "Te amo porque jamás quisiera que sintieras que tienes que cargar solo con tus batallas. Si pesan demasiado, déjame sostener una parte.",
-    333: "Te amo porque, si algún día olvidas lo increíble que eres, yo me quedaré el tiempo que haga falta recordándotelo.",
+    333: "Te amo porque si algún día olvidas lo increíble que eres, yo me quedaré el tiempo que haga falta recordándotelo.",
     334: "Te amo porque nunca he sentido que amarte sea un esfuerzo. Incluso en los días difíciles, elegirte sigue siendo natural.",
     335: "Te amo porque hay una paz en tu presencia que no he encontrado en ningún otro lugar.",
     336: "Te amo porque, cuando el miedo intenta convencerme de rendirme, pensar en nosotros siempre me devuelve el valor para seguir.",
@@ -33,8 +33,8 @@ const reasons = {
     361: "Te amo porque, si alguna vez sientes que el mundo entero está en tu contra, quiero que recuerdes que siempre tendrás un lugar seguro en mí.",
     362: "Te amo porque no sé qué aventuras nos esperan, pero sé que cualquiera de ellas será mejor si puedo vivirla contigo.",
     363: "Te amo porque, después de todo este tiempo, todavía hay momentos en los que te miro y mi corazón se pregunta cómo tuvo tanta suerte.",
-    364: "Te amo porque, cuando pienso en lo mejor que me ha pasado en la vida, tu nombre aparece antes que cualquier recuerdo.",
-    365: "Te amo porque, después de escribir tantas razones, descubrí algo muy simple: ninguna logra explicar completamente lo que siento por ti. Si tuviera que escribir una razón más cada día que pase a tu lado, lo haría con gusto durante el resto de mi vida, porque amarte nunca cabrá en una lista. Cabrá, eso sí, en cada día que elija compartir contigo."
+    364: "Te amo porque, cuando penso en lo mejor que me ha pasado en la vida, tu nombre aparece antes que cualquier recuerdo.",
+    365: "Te amo porque, después de escribir tantas razones, descubrió algo muy simple: ninguna logra explicar completamente lo que siento por ti. Si tuviera que escribir una razón más cada día que pase a tu lado, lo haría con gusto durante el resto de mi vida, porque amarte nunca cabrá en una lista. Cabrá, eso sí, en cada día que elija compartir contigo."
 };
 
 let currentReasonKey = 330;
@@ -54,7 +54,34 @@ const nextBtn = document.getElementById('nextBtn');
 const pageIndicator = document.getElementById('pageIndicator');
 const finalScreen = document.getElementById('finalScreen');
 const realMusic = document.getElementById('realMusic');
+const musicToggleBtn = document.getElementById('musicToggleBtn');
 
+// Configurar volumen inicial
+realMusic.volume = 0.7;
+
+// LÓGICA DEL BOTÓN FLOTANTE DE MÚSICA
+musicToggleBtn.addEventListener('click', () => {
+    if (realMusic.paused) {
+        playAudio();
+    } else {
+        pauseAudio();
+    }
+});
+
+function playAudio() {
+    realMusic.play().then(() => {
+        musicToggleBtn.classList.add('playing');
+        musicToggleBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    }).catch(err => console.log("Error al reproducir:", err));
+}
+
+function pauseAudio() {
+    realMusic.pause();
+    musicToggleBtn.classList.remove('playing');
+    musicToggleBtn.innerHTML = '<i class="fas fa-music"></i>';
+}
+
+// Configuración del Fondo de partículas por Canvas
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -109,9 +136,10 @@ function animateParticles() {
 initParticles();
 animateParticles();
 
+// Botón de Inicio
 startBtn.addEventListener('click', () => {
-    realMusic.volume = 0.8; // Volumen ideal para que se escuche fuerte en celulares
-    realMusic.play().catch(e => console.log("Audio play bloqueado:", e));
+    // Intentar reproducir automáticamente
+    playAudio();
     
     introScreen.classList.remove('active');
     introScreen.classList.add('hidden');
@@ -229,15 +257,8 @@ function triggerCinematicFinal() {
         finalScreen.classList.remove('hidden');
         finalScreen.classList.add('active');
         
-        let vol = realMusic.volume;
-        const fadeInterval = setInterval(() => {
-            if (vol > 0.12) {
-                vol -= 0.02;
-                realMusic.volume = Math.max(0.12, vol);
-            } else {
-                clearInterval(fadeInterval);
-            }
-        }, 200);
-        
+        // Pausar música al final
+        pauseAudio();
+        musicToggleBtn.style.display = 'none';
     }, 2800);
 }
