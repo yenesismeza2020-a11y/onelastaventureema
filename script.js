@@ -110,7 +110,7 @@ initParticles();
 animateParticles();
 
 startBtn.addEventListener('click', () => {
-    realMusic.volume = 0.35; // Volumen suave e ideal para Fly Love
+    realMusic.volume = 0.8; // Volumen ideal para que se escuche fuerte en celulares
     realMusic.play().catch(e => console.log("Audio play bloqueado:", e));
     
     introScreen.classList.remove('active');
