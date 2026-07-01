@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Last Archive</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
     <!-- Fondo de partículas por Canvas -->
     <canvas id="particleCanvas"></canvas>
 
-    <!-- REPRODUCTOR CON MÚSICA DE PRUEBA DIRECTA DE INTERNET -->
-    <audio id="realMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto"></audio>
+    <!-- Forzamos la carga de tu canción local music.mp3 -->
+    <audio id="realMusic" loop src="music.mp3?v=2" preload="auto"></audio>
 
     <!-- Pantalla de Bienvenida (Intro) -->
     <div id="introScreen" class="overlay-screen active">
@@ -75,6 +75,6 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=2"></script>
 </body>
 </html>
