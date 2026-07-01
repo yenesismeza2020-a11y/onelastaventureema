@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Last Archive</title>
-    <link rel="stylesheet" href="style.css?v=captcha_final_v1">
-    <!-- Íconos de Font Awesome para los botones de reinicio y verificación -->
+    <link rel="stylesheet" href="style.css?v=captcha_fixed_pie">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* --- ESTILOS DEL CAPTCHA PERSONALIZADO --- */
@@ -120,10 +119,8 @@
     </style>
 </head>
 <body>
-    <!-- Fondo de partículas por Canvas -->
     <canvas id="particleCanvas"></canvas>
 
-    <!-- VENTANA DEL CAPTCHA PERSONALIZADO -->
     <div id="captchaModal" class="captcha-modal">
         <div class="captcha-header">
             <h3>Verificación de Seguridad</h3>
@@ -131,20 +128,18 @@
         </div>
         <div id="captchaError" class="captcha-error">Acceso Denegado. Inténtalo de nuevo.</div>
         <div class="captcha-grid">
-            <!-- Fila 1 -->
             <div class="captcha-item" data-correct="true" style="font-size: 2.5rem;">🍩<span>dona</span></div>
             <div class="captcha-item" data-correct="false" style="font-size: 2.5rem;">🪕<span>ukelele</span></div>
             <div class="captcha-item" data-correct="false" style="font-size: 2.5rem;">🎸<span>guitarra</span></div>
             
-            <!-- Fila 2 -->
             <div class="captcha-item" data-correct="true" style="font-size: 2.5rem;">🐸<span>rana</span></div>
             <div class="captcha-item" data-correct="false" style="font-size: 2.5rem;">🦝<span>mapache</span></div>
             <div class="captcha-item" data-correct="false" style="font-size: 2.5rem;">🦉<span>búho</span></div>
             
-            <!-- Fila 3 -->
             <div class="captcha-item" data-correct="true" style="font-size: 2.5rem;">👻<span>hollow_k</span></div>
             <div class="captcha-item" data-correct="false" style="font-size: 2.5rem;">🥕<span>zanahoria</span></div>
             <div class="captcha-item" data-correct="false" style="font-size: 2.5rem;">🥧<span>pie</span></div>
+        </div>
         <div class="captcha-footer">
             <div class="captcha-icons">
                 <i class="fas fa-redo" id="resetCaptcha" title="Reiniciar"></i>
@@ -154,7 +149,6 @@
         </div>
     </div>
 
-    <!-- Pantalla de Bienvenida (Intro) -->
     <div id="introScreen" class="overlay-screen active">
         <div class="intro-content">
             <h1 class="glitch-text">DREAM ARCHIVE</h1>
@@ -163,11 +157,9 @@
         </div>
     </div>
 
-    <!-- Contenedor Principal del Libro -->
     <div id="archiveContainer" class="hidden">
         <div class="book-wrapper">
             <div class="book-container" id="book">
-                <!-- Tapa Delantera -->
                 <div class="page cover front" id="coverFront">
                     <div class="cover-content">
                         <h2>The Last Archive</h2>
@@ -177,7 +169,6 @@
                     </div>
                 </div>
 
-                <!-- Páginas dinámicas -->
                 <div class="page dynamic-page turned" id="leftPage">
                     <div class="page-content left-content"></div>
                 </div>
@@ -188,7 +179,6 @@
                     </div>
                 </div>
 
-                <!-- Tapa Trasera -->
                 <div class="page cover back" id="coverBack">
                     <div class="cover-content">
                         <h3>Fin del Registro</h3>
@@ -197,7 +187,6 @@
             </div>
         </div>
 
-        <!-- Controles de navegación -->
         <div class="controls" id="controls">
             <button id="prevBtn" class="nav-btn" disabled>&#9664; Anterior</button>
             <span id="pageIndicator">330 / 365</span>
@@ -205,7 +194,6 @@
         </div>
     </div>
 
-    <!-- Pantalla Final Cinematográfica -->
     <div id="finalScreen" class="overlay-screen hidden">
         <div class="final-content">
             <h1 class="fade-in-target">Mission Complete</h1>
@@ -216,6 +204,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=captcha_final_v1"></script>
+    <script src="script.js?v=captcha_fixed_pie"></script>
 </body>
 </html>
