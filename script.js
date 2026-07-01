@@ -18,7 +18,7 @@ const reasons = {
     346: "Te amo porque, si tuviera la oportunidad de volver a vivir mi vida desde el principio, volvería a buscarte hasta encontrarte otra vez.",
     347: "Te amo porque contigo entendí que el amor más fuerte no es el que nunca cambia, sino el que decide permanecer mientras ambos cambian.",
     348: "Te amo porque me haces creer que existen personas capaces de transformar una vida solo con su manera de querer.",
-    349: "Te amo porque jamás quisiera que dejaras de prseguir tus sueños, y me haría feliz acompañarte mientras los alcanzas.",
+    349: "Te amo porque jamás quisiera que dejaras de perseguir tus sueños, y me haría feliz acompañarte mientras los alcanzas.",
     350: "Te amo porque, incluso en los días en los que ninguno de los dos tenga fuerzas, sé que podremos apoyarnos mutuamente para seguir adelante.",
     351: "Te amo porque tu felicidad nunca ha sido una competencia con la mía; siempre ha sido una alegría compartida.",
     352: "Te amo porque no necesito que prometas no cambiar. Solo espero poder conocer y amar cada nueva versión de ti.",
@@ -73,7 +73,7 @@ startBtn.addEventListener('click', () => {
 captchaItems.forEach(item => {
     item.addEventListener('click', () => {
         item.classList.toggle('selected');
-        captchaError.style.display = 'none'; // Ocultar error al tocar otra casilla
+        captchaError.style.display = 'none';
     });
 });
 
@@ -88,15 +88,13 @@ verifyBtn.addEventListener('click', () => {
 
         if (isSelected) selectedCount++;
 
-        // Si está seleccionada pero es falsa, o si era correcta pero NO se seleccionó: error.
         if ((isSelected && !isCorrectTarget) || (!isSelected && isCorrectTarget)) {
             allCorrect = false;
         }
     });
 
-    // Validar que al menos haya seleccionado las 3 correctas
     if (allCorrect && selectedCount === 3) {
-        // ¡CÓDIGO CORRECTO! Pasar al libro
+        // ¡ACCESO CONCEDIDO!
         captchaModal.classList.remove('active');
         introScreen.classList.remove('active');
         introScreen.classList.add('hidden');
@@ -106,9 +104,8 @@ verifyBtn.addEventListener('click', () => {
             openBook();
         }, 600);
     } else {
-        // Error en la selección
+        // Error
         captchaError.style.display = 'block';
-        // Animación rápida de sacudida por error
         captchaModal.style.transform = 'translate(-50%, -50%) cubic-bezier(.36,.07,.19,.97) both';
         setTimeout(() => { captchaModal.style.transform = 'translate(-50%, -50%)'; }, 500);
     }
@@ -232,7 +229,7 @@ function triggerCinematicFinal() {
     }, 2800);
 }
 
-// Fondo de Partículas (Fijo)
+// Fondo de Partículas por Canvas
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -281,3 +278,4 @@ function animateParticles() {
 }
 initParticles();
 animateParticles();
+    
