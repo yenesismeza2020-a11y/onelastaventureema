@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Last Archive</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Fondo de partículas por Canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Elemento de Audio (Música de fondo mística/romántica sin copyright de libre uso) -->
+    <audio id="bgMusic" loop src="https://assets.mixkit.co/active_storage/sfx/123/123-200.wav" preload="auto"></audio>
+    <!-- Alternativa: Un piano suave embebido de URL confiable o puedes reemplazar el src -->
+    <audio id="realMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto"></audio>
+
+    <!-- Pantalla de Bienvenida (Intro) -->
+    <div id="introScreen" class="overlay-screen active">
+        <div class="intro-content">
+            <h1 class="glitch-text">DREAM ARCHIVE</h1>
+            <p class="blink-text">Hidden Memory Detected...</p>
+            <button id="startBtn" class="action-btn">Access Archive</button>
+        </div>
+    </div>
+
+    <!-- Contenedor Principal del Libro -->
+    <div id="archiveContainer" class="hidden">
+        <div class="book-wrapper">
+            <div class="book-container" id="book">
+                <!-- Tapa Delantera -->
+                <div class="page cover front" id="coverFront">
+                    <div class="cover-content">
+                        <h2>The Last Archive</h2>
+                        <div class="divider"></div>
+                        <p>Reasons 330 — 365</p>
+                        <small class="click-hint">Click para abrir</small>
+                    </div>
+                </div>
+
+                <!-- Las páginas se generarán dinámicamente con JavaScript para evitar errores de tipeo y mantener limpieza -->
+                <div class="page dynamic-page turned" id="leftPage">
+                    <div class="page-content left-content">
+                        <!-- Contenido Izquierdo Dinámico -->
+                    </div>
+                </div>
+
+                <div class="page dynamic-page" id="rightPage">
+                    <div class="page-content right-content">
+                        <!-- Contenido Derecho Dinámico (Donde corre la máquina de escribir) -->
+                        <div id="reasonText" class="typewriter-text"></div>
+                    </div>
+                </div>
+
+                <!-- Tapa Trasera -->
+                <div class="page cover back" id="coverBack">
+                    <div class="cover-content">
+                        <h3>Fin del Registro</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles de navegación -->
+        <div class="controls" id="controls">
+            <button id="prevBtn" class="nav-btn" disabled>&#9664; Anterior</button>
+            <span id="pageIndicator">330 / 365</span>
+            <button id="nextBtn" class="nav-btn">Siguiente &#9654;</button>
+        </div>
+    </div>
+
+    <!-- Pantalla Final Cinematográfica -->
+    <div id="finalScreen" class="overlay-screen hidden">
+        <div class="final-content">
+            <h1 class="fade-in-target">Mission Complete</h1>
+            <p class="fade-in-target-sub">Thank you for being my favorite adventure.</p>
+        </div>
+        <!-- Contenedor especial para la estrella fugaz cayendo lentamente -->
+        <div class="star-container">
+            <div class="shooting-star"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+/* Diseñado para The Last Archive - Ema */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #080711;
+    color: #f0e6ff;
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+/* Canvas de Partículas */
+#particleCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Pantallas Superpuestas (Intro y Final) */
+.overlay-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #06050c;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    transition: opacity 1.5s ease, visibility 1.5s;
+}
+
+.overlay-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.overlay-screen.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Estilos de Intro */
+.intro-content h1 {
+    font-size: 3rem;
+    letter-spacing: 5px;
+    color: #a18cd1;
+    text-shadow: 0 0 20px rgba(161, 140, 209, 0.6);
+    margin-bottom: 10px;
+    font-family: monospace;
+}
+
+.blink-text {
+    font-size: 1.2rem;
+    color: #6c5ce7;
+    margin-bottom: 40px;
+    font-family: monospace;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+.action-btn {
+    background: transparent;
+    border: 1px solid #a18cd1;
+    color: #f0e6ff;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-family: monospace;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(161, 140, 209, 0.2);
+}
+
+.action-btn:hover {
+    background: #a18cd1;
+    color: #080711;
+    box-shadow: 0 0 20px rgba(161, 140, 209, 0.6);
+}
+
+/* Contenedor del Libro */
+#archiveContainer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    transition: opacity 1s ease;
+}
+
+#archiveContainer.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.book-wrapper {
+    perspective: 1500px;
+    width: 900px;
+    height: 550px;
+    max-width: 95vw;
+    max-height: 75vh;
+}
+
+.book-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Páginas */
+.page {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    background: #121026;
+    border: 1px solid #231f47;
+    border-radius: 0 10px 10px 0;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(0.4, 0.0, 0.2, 1), z-index 1s;
+    z-index: 5;
+    box-shadow: 5px 5px 20px rgba(0,0,0,0.5);
+}
+
+.page.turned {
+    transform: rotateY(-180deg);
+    z-index: 4;
+    border-radius: 10px 0 0 10px;
+}
+
+/* Contenido de Página */
+.page-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    padding: 40px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.left-content {
+    transform: rotateY(180deg);
+    border-right: 2px solid #1c183a;
+    background: #100e22;
+}
+
+.right-content {
+    background: #14122a;
+}
+
+/* Tapas */
+.cover.front {
+    z-index: 6;
+    background: linear-gradient(135deg, #1b153a 0%, #0d0a1c 100%);
+    border-left: 5px solid #4a3b8c;
+    cursor: pointer;
+}
+
+.cover.back {
+    transform: rotateY(0deg);
+    z-index: 1;
+    background: linear-gradient(135deg, #0d0a1c 0%, #1b153a 100%);
+}
+
+.cover-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+    padding: 30px;
+}
+
+.cover-content h2 {
+    font-size: 2.4rem;
+    color: #d1c4e9;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.divider {
+    width: 60px;
+    height: 3px;
+    background-color: #6c5ce7;
+    margin-bottom: 20px;
+}
+
+.click-hint {
+    margin-top: 50px;
+    font-size: 0.9rem;
+    color: #8a7ebc;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+/* Texto Máquina de Escribir y Contenido */
+.typewriter-text {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    color: #e2d9f3;
+    white-space: pre-wrap;
+    position: relative;
+}
+
+.typewriter-text::after {
+    content: '|';
+    animation: cursorBlink 0.8s infinite;
+    color: #a18cd1;
+    font-weight: bold;
+}
+
+.typewriter-text.done::after {
+    display: none;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+.old-reason {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #8c82ab;
+    margin-bottom: 20px;
+    opacity: 0.7;
+    border-bottom: 1px dashed #2c2654;
+    padding-bottom: 15px;
+}
+
+/* Controles */
+.controls {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-btn {
+    background: #1c183a;
+    border: 1px solid #4a3b8c;
+    color: #d1c4e9;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: monospace;
+}
+
+.nav-btn:hover:not(:disabled) {
+    background: #4a3b8c;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(108, 92, 231, 0.4);
+}
+
+.nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+#pageIndicator {
+    font-family: monospace;
+    font-size: 1.1rem;
+    color: #a18cd1;
+}
+
+/* Animación de Cierre Suave del Libro */
+.book-container.close-animation {
+    transform: rotateY(0deg) !important;
+    transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Final Cinematográfico */
+.final-content h1 {
+    font-size: 3.5rem;
+    font-family: monospace;
+    letter-spacing: 6px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.final-content p {
+    font-size: 1.3rem;
+    color: #b3a7d6;
+    font-style: italic;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.overlay-screen.active .fade-in-target {
+    animation: fadeInUp 2s forwards 0.5s;
+}
+
+.overlay-screen.active .fade-in-target-sub {
+    animation: fadeInUp 2s forwards 2.5s;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estrella cayendo lentamente */
+.star-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.shooting-star {
+    position: absolute;
+    top: -10%;
+    left: 60%;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+    opacity: 0;
+}
+
+.overlay-screen.active .shooting-star {
+    animation: shootAndDrop 6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards 4.5s;
+}
+
+@keyframes shootAndDrop {
+    0% {
+        top: -10%;
+        left: 65%;
+        opacity: 0;
+        transform: scale(1);
+    }
+    20% {
+        opacity: 1;
+        top: 25%;
+        left: 50%;
+    }
+    60% {
+        opacity: 1;
+        top: 45%;
+        left: 48%;
+        transform: scale(1.2);
+    }
+    100% {
+        top: 110%;
+        left: 45%;
+        opacity: 0;
+        transform: scale(0.5);
+    }
+}
