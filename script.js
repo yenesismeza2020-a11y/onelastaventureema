@@ -18,7 +18,7 @@ const reasons = {
     346: "Te amo porque, si tuviera la oportunidad de volver a vivir mi vida desde el principio, volvería a buscarte hasta encontrarte otra vez.",
     347: "Te amo porque contigo entendí que el amor más fuerte no es el que nunca cambia, sino el que decide permanecer mientras ambos cambian.",
     348: "Te amo porque me haces creer que existen personas capaces de transformar una vida solo con su manera de querer.",
-    349: "Te amo porque jamás quisiera que dejaras de perseguir tus sueños, y me haría feliz acompañarte mientras los alcanzas.",
+    349: "Te amo porque jamás quisiera que dejaras de prseguir tus sueños, y me haría feliz acompañarte mientras los alcanzas.",
     350: "Te amo porque, incluso en los días en los que ninguno de los dos tenga fuerzas, sé que podremos apoyarnos mutuamente para seguir adelante.",
     351: "Te amo porque tu felicidad nunca ha sido una competencia con la mía; siempre ha sido una alegría compartida.",
     352: "Te amo porque no necesito que prometas no cambiar. Solo espero poder conocer y amar cada nueva versión de ti.",
@@ -33,14 +33,15 @@ const reasons = {
     361: "Te amo porque, si alguna vez sientes que el mundo entero está en tu contra, quiero que recuerdes que siempre tendrás un lugar seguro en mí.",
     362: "Te amo porque no sé qué aventuras nos esperan, pero sé que cualquiera de ellas será mejor si puedo vivirla contigo.",
     363: "Te amo porque, después de todo este tiempo, todavía hay momentos en los que te miro y mi corazón se pregunta cómo tuvo tanta suerte.",
-    364: "Te amo porque, cuando penso en lo mejor que me ha pasado en la vida, tu nombre aparece antes que cualquier recuerdo.",
-    365: "Te amo porque, después de escribir tantas razones, descubrió algo muy simple: ninguna logra explicar completamente lo que siento por ti. Si tuviera que escribir una razón más cada día que pase a tu lado, lo haría con gusto durante el resto de mi vida, porque amarte nunca cabrá en una lista. Cabrá, eso sí, en cada día que elija compartir contigo."
+    364: "Te amo porque, cuando pienso en lo mejor que me ha pasado en la vida, tu nombre aparece antes que cualquier recuerdo.",
+    365: "Te amo porque, después de escribir tantas razones, descubrí algo muy simple: ninguna logra explicar completamente lo que siento por ti. Si tuviera que escribir una razón más cada día que pase a tu lado, lo haría con gusto durante el resto de mi vida, porque amarte nunca cabrá en una lista. Cabrá, eso sí, en cada día que elija compartir contigo."
 };
 
 let currentReasonKey = 330;
 let typewriterInterval = null;
 let isTyping = false;
 
+// Elementos de la interfaz
 const introScreen = document.getElementById('introScreen');
 const startBtn = document.getElementById('startBtn');
 const archiveContainer = document.getElementById('archiveContainer');
@@ -53,102 +54,74 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const pageIndicator = document.getElementById('pageIndicator');
 const finalScreen = document.getElementById('finalScreen');
-const realMusic = document.getElementById('realMusic');
-const musicToggleBtn = document.getElementById('musicToggleBtn');
 
-// Configurar volumen inicial
-realMusic.volume = 0.7;
+// Elementos del Captcha
+const captchaModal = document.getElementById('captchaModal');
+const captchaItems = document.querySelectorAll('.captcha-item');
+const verifyBtn = document.getElementById('verifyBtn');
+const captchaError = document.getElementById('captchaError');
+const resetCaptcha = document.getElementById('resetCaptcha');
 
-// LÓGICA DEL BOTÓN FLOTANTE DE MÚSICA
-musicToggleBtn.addEventListener('click', () => {
-    if (realMusic.paused) {
-        playAudio();
-    } else {
-        pauseAudio();
-    }
-});
+// --- LÓGICA INTERACTIVA DEL CAPTCHA ---
 
-function playAudio() {
-    realMusic.play().then(() => {
-        musicToggleBtn.classList.add('playing');
-        musicToggleBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    }).catch(err => console.log("Error al reproducir:", err));
-}
-
-function pauseAudio() {
-    realMusic.pause();
-    musicToggleBtn.classList.remove('playing');
-    musicToggleBtn.innerHTML = '<i class="fas fa-music"></i>';
-}
-
-// Configuración del Fondo de partículas por Canvas
-const canvas = document.getElementById('particleCanvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
-class Particle {
-    constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedX = Math.random() * 0.5 - 0.25;
-        this.speedY = Math.random() * 0.4 + 0.1;
-        this.opacity = Math.random() * 0.5 + 0.2;
-    }
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.y > canvas.height) {
-            this.y = 0;
-            this.x = Math.random() * canvas.width;
-        }
-    }
-    draw() {
-        ctx.fillStyle = `rgba(161, 140, 209, ${this.opacity})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-    }
-}
-
-function initParticles() {
-    particles = [];
-    for (let i = 0; i < 70; i++) {
-        particles.push(new Particle());
-    }
-}
-
-function animateParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-        p.update();
-        p.draw();
-    });
-    requestAnimationFrame(animateParticles);
-}
-initParticles();
-animateParticles();
-
-// Botón de Inicio
+// 1. Abrir Captcha al presionar el botón de inicio
 startBtn.addEventListener('click', () => {
-    // Intentar reproducir automáticamente
-    playAudio();
-    
-    introScreen.classList.remove('active');
-    introScreen.classList.add('hidden');
-    archiveContainer.classList.remove('hidden');
-    
-    setTimeout(() => {
-        openBook();
-    }, 800);
+    captchaModal.classList.add('active');
 });
+
+// 2. Marcar/Desmarcar casillas
+captchaItems.forEach(item => {
+    item.addEventListener('click', () => {
+        item.classList.toggle('selected');
+        captchaError.style.display = 'none'; // Ocultar error al tocar otra casilla
+    });
+});
+
+// 3. Botón de Verificar
+verifyBtn.addEventListener('click', () => {
+    let allCorrect = true;
+    let selectedCount = 0;
+
+    captchaItems.forEach(item => {
+        const isSelected = item.classList.contains('selected');
+        const isCorrectTarget = item.getAttribute('data-correct') === 'true';
+
+        if (isSelected) selectedCount++;
+
+        // Si está seleccionada pero es falsa, o si era correcta pero NO se seleccionó: error.
+        if ((isSelected && !isCorrectTarget) || (!isSelected && isCorrectTarget)) {
+            allCorrect = false;
+        }
+    });
+
+    // Validar que al menos haya seleccionado las 3 correctas
+    if (allCorrect && selectedCount === 3) {
+        // ¡CÓDIGO CORRECTO! Pasar al libro
+        captchaModal.classList.remove('active');
+        introScreen.classList.remove('active');
+        introScreen.classList.add('hidden');
+        archiveContainer.classList.remove('hidden');
+        
+        setTimeout(() => {
+            openBook();
+        }, 600);
+    } else {
+        // Error en la selección
+        captchaError.style.display = 'block';
+        // Animación rápida de sacudida por error
+        captchaModal.style.transform = 'translate(-50%, -50%) cubic-bezier(.36,.07,.19,.97) both';
+        setTimeout(() => { captchaModal.style.transform = 'translate(-50%, -50%)'; }, 500);
+    }
+});
+
+// 4. Reiniciar casillas
+resetCaptcha.addEventListener('click', () => {
+    captchaItems.forEach(item => item.classList.remove('selected'));
+    captchaError.style.display = 'none';
+});
+
+
+// --- LÓGICA DEL LIBRO INTERACTIVO ---
 
 function openBook() {
     coverFront.classList.add('turned');
@@ -256,9 +229,55 @@ function triggerCinematicFinal() {
         archiveContainer.classList.add('hidden');
         finalScreen.classList.remove('hidden');
         finalScreen.classList.add('active');
-        
-        // Pausar música al final
-        pauseAudio();
-        musicToggleBtn.style.display = 'none';
     }, 2800);
 }
+
+// Fondo de Partículas (Fijo)
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.4 + 0.1;
+        this.opacity = Math.random() * 0.5 + 0.2;
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.y > canvas.height) {
+            this.y = 0;
+            this.x = Math.random() * canvas.width;
+        }
+    }
+    draw() {
+        ctx.fillStyle = `rgba(161, 140, 209, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+function initParticles() {
+    particles = [];
+    for (let i = 0; i < 70; i++) particles.push(new Particle());
+}
+
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animateParticles);
+}
+initParticles();
+animateParticles();
