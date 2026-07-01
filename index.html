@@ -10,10 +10,8 @@
     <!-- Fondo de partículas por Canvas -->
     <canvas id="particleCanvas"></canvas>
 
-    <!-- Elemento de Audio (Música de fondo mística/romántica sin copyright de libre uso) -->
-    <audio id="bgMusic" loop src="https://assets.mixkit.co/active_storage/sfx/123/123-200.wav" preload="auto"></audio>
-    <!-- Alternativa: Un piano suave embebido de URL confiable o puedes reemplazar el src -->
-    <audio id="realMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto"></audio>
+    <!-- Reproductor de Audio Local -->
+    <audio id="realMusic" loop src="music.mp3" preload="auto"></audio>
 
     <!-- Pantalla de Bienvenida (Intro) -->
     <div id="introScreen" class="overlay-screen active">
@@ -38,16 +36,13 @@
                     </div>
                 </div>
 
-                <!-- Las páginas se generarán dinámicamente con JavaScript para evitar errores de tipeo y mantener limpieza -->
+                <!-- Páginas dinámicas -->
                 <div class="page dynamic-page turned" id="leftPage">
-                    <div class="page-content left-content">
-                        <!-- Contenido Izquierdo Dinámico -->
-                    </div>
+                    <div class="page-content left-content"></div>
                 </div>
 
                 <div class="page dynamic-page" id="rightPage">
                     <div class="page-content right-content">
-                        <!-- Contenido Derecho Dinámico (Donde corre la máquina de escribir) -->
                         <div id="reasonText" class="typewriter-text"></div>
                     </div>
                 </div>
@@ -75,7 +70,6 @@
             <h1 class="fade-in-target">Mission Complete</h1>
             <p class="fade-in-target-sub">Thank you for being my favorite adventure.</p>
         </div>
-        <!-- Contenedor especial para la estrella fugaz cayendo lentamente -->
         <div class="star-container">
             <div class="shooting-star"></div>
         </div>
