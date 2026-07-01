@@ -1,4 +1,3 @@
-// Las 36 razones completas provistas por el usuario (330 a 365)
 const reasons = {
     330: "Te amo porque, incluso cuando el mundo cambia constantemente, hay algo en mí que siempre encuentra el camino de regreso a ti.",
     331: "Te amo porque no quiero una historia perfecta contigo; quiero una historia real, donde ambos aprendamos, tropecemos y sigamos eligiéndonos.",
@@ -24,7 +23,7 @@ const reasons = {
     351: "Te amo porque tu felicidad nunca ha sido una competencia con la mía; siempre ha sido una alegría compartida.",
     352: "Te amo porque no necesito que prometas no cambiar. Solo espero poder conocer y amar cada nueva versión de ti.",
     353: "Te amo porque, si algún día la rutina intenta apagar el brillo de las cosas, haré todo lo posible por seguir encontrando magia en nosotros.",
-    354: "Te amo porque eres el tipo de persona que hace que el amor se sienta como un hogar y no como una incertidumbre.",
+    354: "Te amo porque eres el tipo de persona que hace que el amor se sientas como un hogar y no como una incertidumbre.",
     355: "Te amo porque nunca me has dado motivos para dejar de creer en lo que estamos construyendo.",
     356: "Te amo porque cada recuerdo contigo confirma que el mejor lugar donde he estado siempre ha sido a tu lado.",
     357: "Te amo porque no quiero una vida sin problemas; quiero una vida en la que podamos resolverlos juntos.",
@@ -42,7 +41,6 @@ let currentReasonKey = 330;
 let typewriterInterval = null;
 let isTyping = false;
 
-// Elementos del DOM
 const introScreen = document.getElementById('introScreen');
 const startBtn = document.getElementById('startBtn');
 const archiveContainer = document.getElementById('archiveContainer');
@@ -57,7 +55,6 @@ const pageIndicator = document.getElementById('pageIndicator');
 const finalScreen = document.getElementById('finalScreen');
 const realMusic = document.getElementById('realMusic');
 
-// Sistema de partículas de fondo (Canvas)
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -112,17 +109,14 @@ function animateParticles() {
 initParticles();
 animateParticles();
 
-// Inicializar el flujo de la aplicación
 startBtn.addEventListener('click', () => {
-    // Iniciar música de fondo de forma segura tras interacción de usuario
-    realMusic.volume = 0.4;
-    realMusic.play().catch(e => console.log("Audio play bloqueado o requiere recurso activo:", e));
+    realMusic.volume = 0.35; // Volumen suave e ideal para Fly Love
+    realMusic.play().catch(e => console.log("Audio play bloqueado:", e));
     
     introScreen.classList.remove('active');
     introScreen.classList.add('hidden');
     archiveContainer.classList.remove('hidden');
     
-    // Abrir la tapa automáticamente tras entrar
     setTimeout(() => {
         openBook();
     }, 800);
@@ -130,11 +124,10 @@ startBtn.addEventListener('click', () => {
 
 function openBook() {
     coverFront.classList.add('turned');
-    book.style.transform = "translateX(25%)"; // Centra el libro abierto
+    book.style.transform = "translateX(25%)";
     updatePageContent();
 }
 
-// Función del efecto Máquina de Escribir
 function typeWriter(text, element, speed = 40) {
     clearInterval(typewriterInterval);
     isTyping = true;
@@ -154,12 +147,10 @@ function typeWriter(text, element, speed = 40) {
     }, speed);
 }
 
-// Actualizar contenido de páginas dinámicas
 function updatePageContent() {
     const leftContent = leftPage.querySelector('.page-content');
-    leftContent.innerHTML = ""; // Limpiar
+    leftContent.innerHTML = "";
     
-    // En la página izquierda mostramos un historial elegante o un título del archivo
     const indexTitle = document.createElement('h4');
     indexTitle.style.fontFamily = 'monospace';
     indexTitle.style.color = '#6c5ce7';
@@ -167,7 +158,6 @@ function updatePageContent() {
     indexTitle.textContent = `ENTRY_LOG #${currentReasonKey}`;
     leftContent.appendChild(indexTitle);
 
-    // Agregar la razón anterior de fondo si existe para dar efecto de continuidad lírica
     if (currentReasonKey > 330) {
         const prevReasonBox = document.createElement('div');
         prevReasonBox.className = 'old-reason';
@@ -183,17 +173,13 @@ function updatePageContent() {
     stamp.textContent = `STATUS: ACTIVE // VAL_ID: EMA_${currentReasonKey}`;
     leftContent.appendChild(stamp);
 
-    // Actualizar indicador de página
     pageIndicator.textContent = `${currentReasonKey} / 365`;
 
-    // Despachar efecto máquina de escribir en el lado derecho
     const fullText = `${currentReasonKey}. ${reasons[currentReasonKey]}`;
     typeWriter(fullText, reasonTextElement, 35);
 
-    // Controlar estados de los botones de navegación
     prevBtn.disabled = (currentReasonKey === 330);
     
-    // Si llegamos al 365 cambia la acción del botón final
     if (currentReasonKey === 365) {
         nextBtn.textContent = "Finalizar";
     } else {
@@ -201,10 +187,8 @@ function updatePageContent() {
     }
 }
 
-// Eventos de Navegación de Páginas
 nextBtn.addEventListener('click', () => {
     if (isTyping) {
-        // Si está escribiendo, saltar directamente al texto completo
         clearInterval(typewriterInterval);
         reasonTextElement.textContent = `${currentReasonKey}. ${reasons[currentReasonKey]}`;
         reasonTextElement.classList.add('done');
@@ -213,18 +197,12 @@ nextBtn.addEventListener('click', () => {
     }
 
     if (currentReasonKey === 365) {
-        // Ejecutar el final cinematográfico
         triggerCinematicFinal();
         return;
     }
 
-    // Animación visual de cambio de página hacia adelante
-    rightPage.style.animation = "none";
-    setTimeout(() => {
-        rightPage.style.animation = "none";
-        currentReasonKey++;
-        updatePageContent();
-    }, 50);
+    currentReasonKey++;
+    updatePageContent();
 });
 
 prevBtn.addEventListener('click', () => {
@@ -234,34 +212,28 @@ prevBtn.addEventListener('click', () => {
     }
 });
 
-// Final Cinematográfico
 function triggerCinematicFinal() {
-    // Deshabilitar controles por completo
     document.getElementById('controls').style.pointerEvents = 'none';
     nextBtn.disabled = true;
     prevBtn.disabled = true;
 
-    // 1. Cerrar el libro lentamente
     coverFront.classList.remove('turned');
     book.className = "book-container close-animation";
     
-    // Reducir la opacidad del contenedor del libro gradualmente
     setTimeout(() => {
         archiveContainer.style.opacity = "0";
     }, 1500);
 
-    // 2. Mostrar la pantalla final cinematográfica
     setTimeout(() => {
         archiveContainer.classList.add('hidden');
         finalScreen.classList.remove('hidden');
         finalScreen.classList.add('active');
         
-        // Desvanecer música sutilmente a volumen muy bajo/ambiente
         let vol = realMusic.volume;
         const fadeInterval = setInterval(() => {
-            if (vol > 0.15) {
+            if (vol > 0.12) {
                 vol -= 0.02;
-                realMusic.volume = Math.max(0.15, vol);
+                realMusic.volume = Math.max(0.12, vol);
             } else {
                 clearInterval(fadeInterval);
             }
